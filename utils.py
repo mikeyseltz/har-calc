@@ -39,7 +39,7 @@ class Calculator:
         time = 90 / g_performance(vel, g)[0]
         alt = sin(radians(dive))*g_performance(vel, g)[1]
         rng = cos(radians(dive))*g_performance(vel, g)[1] # range is increasing now
-        return {'time': time, 'alt': alt, 'rng': rng}
+        return {'time': time, 'alt': alt, 'rng': rng, 'dive':dive}
 
     def accel_in_dive(self, start_vel, end_vel, dive): # should we be using mach or TAS?
         accel_rate = 50 # const accel rate of 50 knots per second
@@ -56,7 +56,7 @@ class Calculator:
         alt = (st_vert_rate * time) + ((end_vert_rate * time)-(st_vert_rate*time))/2
         # calculate range delta during accel
         rng = (st_horiz_rate * time) + ((end_horiz_rate * time)-(st_horiz_rate*time))/2
-        return {'time': time, 'alt': alt, 'rng': rng}
+        return {'time': time, 'alt': alt, 'rng': rng, 'vel': end_vel}
 
     def straight_dive(self, vel, dive, st_alt): # terminates at 4500' <-- hard coded for now
         descent_rate = sin(radians(dive))*vel*1.68781
