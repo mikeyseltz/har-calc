@@ -5,7 +5,7 @@ from utils import Calculator
 
 class Engagement:
 
-	state = {'alt': None, 'vel':None, 'rng':None, 'dive':0, 'alive':True, 'time':0}
+	state = {'alt': None, 'vel': None, 'rng': None, 'dive': 0, 'alive': True, 'time': 0}
 
 	def __init__(self, missile=None):
 		self.missile = missile
@@ -44,10 +44,10 @@ class Engagement:
 		print(f"At time {self.state['time']}: {self.state['alt']}ft, Rng: {self.state['rng']/6036}nm, Dive: {self.state['dive']}deg")
 
 
-#solve for time to established dive
+# solve for time to established dive
 
-#solve for radar horizon // or input this (altitude of terrain?)
+# solve for radar horizon // or input this (altitude of terrain?)
 
-#solve for time to below horizon
+# solve for time to below horizon
 
-#solve for turn radius (in dive)
+# solve for turn radius (in dive)
