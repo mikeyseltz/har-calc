@@ -19,9 +19,9 @@ class Calculator:
         return degrees(acos(1/g)) # returns degrees of bank in level turn at "g" loading
 
     def g_performance(self, vel, g):
-        bank = bank_for_g(g)
-        rate = level_turn_rate(vel, bank)
-        radius = level_turn_radius(vel, bank)
+        bank = self.bank_for_g(g)
+        rate = self.level_turn_rate(vel, bank)
+        radius = self.level_turn_radius(vel, bank)
         return (rate, radius)
 
     def time_to_act(self, time, vel):
@@ -30,15 +30,15 @@ class Calculator:
         return {'time': time, 'alt': 0, 'rng': rng}
 
     def first_90(self, vel, g, dive=0): # returns (time, alt delta, range delta)
-        time = (90 / g_performance(vel, g)[0]) + (g/self.g_onset) # over simplified, need to integrate over time if want better acc.
+        time = (90 / self.g_performance(vel, g)[0]) + (g/self.g_onset) # over simplified, need to integrate over time if want better acc.
         alt = 0
-        rng = -g_performance(vel, g)[1] # no penalty for g onset...need calculus // range is negative, ie. closure
+        rng = -self.g_performance(vel, g)[1] # no penalty for g onset...need calculus // range is negative, ie. closure
         return {'time': time, 'alt': alt, 'rng': rng}
         
     def second_90(self, vel, g, dive): # returns (time, alt delta, range delta)
-        time = 90 / g_performance(vel, g)[0]
-        alt = sin(radians(dive))*g_performance(vel, g)[1]
-        rng = cos(radians(dive))*g_performance(vel, g)[1] # range is increasing now
+        time = 90 / self.g_performance(vel, g)[0]
+        alt = sin(radians(dive))*self.g_performance(vel, g)[1]
+        rng = cos(radians(dive))*self.g_performance(vel, g)[1] # range is increasing now
         return {'time': time, 'alt': alt, 'rng': rng, 'dive':dive}
 
     def accel_in_dive(self, start_vel, end_vel, dive): # should we be using mach or TAS?
