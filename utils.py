@@ -61,7 +61,28 @@ class Calculator:
 
     def straight_dive(self, vel, dive, st_alt):  # terminates at 4500' <-- hard coded for now
         descent_rate = sin(radians(dive))*vel*1.68781
-        alt_to_lose = st_alt - 4500
-        time = alt_to_lose / descent_rate  # time in seconds until at 4500'
+        alt_to_lose = st_alt - (dive/0.01)
+        time = alt_to_lose / descent_rate  # time in seconds until at 1% of dive
         rng = cos(radians(dive))*vel*1.68781*time
         return {'time': time, 'alt': alt_to_lose, 'rng': rng}
+
+    def recover_to_level(self, vel, st_dive, st_alt):
+        min_alt = 500  # break this hard code at some point
+        alt = st_alt
+        dive = st_dive
+        time = 0
+        rng = 0
+        des = lambda x : sin(radians(x))*vel*1.68781  # feet per second
+        rng_inc = lambda x : cos(radians(x))*vel*1.68781
+        while  alt > min_alt:
+            dive = alt * 0.01
+            alt -= des(dive)
+            rng += rng_inc(dive)
+            time += 1
+        dive = 0
+        return {'time': time, 'alt': st_alt-alt, 'rng': rng, 'dive' : dive}
+
+
+
+
+
