@@ -3,27 +3,39 @@ from math import tan, cos, acos, sin, degrees, radians
 from utils import Calculator
 
 
+def main():
+
+	st_alt = float(input("start altitude in feet >>> "))
+	st_vel = float(input("start speed in knots >>> "))
+	st_rng = float(input("starting range to tgt in nm >>> "))*6036
+	delay = float(input("how long to react in seconds >>> "))
+	tgt_dive = float(input("target dive angle >>> "))
+	g = float(input("how many gs will you pull? >>> "))
+	end_vel = float(input('what will you accelerate to in ktas? >>> '))
+
+	e = Engagement({'alt': st_alt, 'vel': st_vel, 'end_vel' : end_vel, 'rng': st_rng, 'dive': 0, 'g' : g, 'alive': True, 'time': 0, 'target_dive' : tgt_dive, 'delay' : delay})
+	e.execute()
+	
 class Engagement:
 
-	state = {'alt': None, 'vel': None, 'rng': None, 'dive': 0, 'alive': True, 'time': 0}
-
-	def __init__(self, missile=None):
+	def __init__(self, state, missile=None):
 		self.missile = missile
+		self.state = state
 
-	def execute(self, st_alt=30000, st_vel=400, dive=45, first_90_dive=0, end_vel=500):
+	def execute(self):
 		c = Calculator(3) # 3 second g-onset hard coded for now
-		self.state['alt'] = float(input("start altitude in feet >>> "))
-		self.state['vel'] = float(input("start speed in knots >>> "))
-		self.state['rng'] = float(input("starting range to tgt in nm >>> "))*6036
-		dive = float(input("target dive angle >>> "))
+		# self.state['alt'] = float(input("start altitude in feet >>> "))
+		# self.state['vel'] = float(input("start speed in knots >>> "))
+		# self.state['rng'] = float(input("starting range to tgt in nm >>> "))*6036
+		dive = self.state['target_dive']
 		print(f"starting at {self.state['alt']}ft and {self.state['vel']} knots, diving to {dive} degrees")
-		delay = float(input("how long to react in seconds >>> "))
+		delay = self.state['delay']
 		self.update_state(c.time_to_act(delay, self.state['vel']))
 
-		g = float(input("how many gs will you pull? >>> "))
+		g = self.state['g']
 		self.update_state(c.first_90(self.state['vel'], g))
 		self.update_state(c.second_90(self.state['vel'], g, dive))
-		end_vel = int(input('what will you accelerate to in ktas? >>> '))
+		end_vel = self.state['end_vel']
 		self.update_state(c.accel_in_dive(self.state['vel'], end_vel, self.state['dive']))
 		self.update_state(c.straight_dive(self.state['vel'], self.state['dive'],self.state['alt']))
 
@@ -41,8 +53,10 @@ class Engagement:
 		except:
 			pass
 
-		print(f"At time {self.state['time']}: {self.state['alt']}ft, Rng: {self.state['rng']/6036}nm, Dive: {self.state['dive']}deg")
+		print(f"At time {self.state['time']:.1f}: {self.state['alt']:.0f}ft, Rng: {(self.state['rng']/6036):.1f}nm, Dive: {self.state['dive']:.1f}deg")
 
+if __name__ == '__main__':
+    main()
 
 # solve for time to established dive
 
