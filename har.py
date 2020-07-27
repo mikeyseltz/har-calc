@@ -22,7 +22,7 @@ class Engagement:
 
 		g = float(input("how many gs will you pull? >>> "))
 		self.update_state(c.first_90(self.state['vel'], g))
-		self.update_state(c.second_90(self.state['vel'], dive))
+		self.update_state(c.second_90(self.state['vel'], g, dive))
 		end_vel = int(input('what will you accelerate to in ktas? >>> '))
 		self.update_state(c.accel_in_dive(self.state['vel'], end_vel, self.state['dive']))
 		self.update_state(c.straight_dive(self.state['vel'], self.state['dive'],self.state['alt']))
