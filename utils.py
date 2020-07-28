@@ -1,6 +1,21 @@
 from math import tan, cos, acos, sin, degrees, radians
 # constants
 
+class Missile:
+    def __init__(self, accel_prof, max_rng=None):
+        self.accel_prof = accel_prof
+        self.max_rng = max_rng
+
+    def tti(self, launch_range):
+        accel = {0: 0.5, 5: 1.5, 10: 3, 20: 2, 30: 1.5}
+        t = 0
+        rng = launch_range
+        while rng > 0:
+            try:
+                speed = accel[t]
+            rng += speed / 60
+            t++
+        return t # no this won't work....need input launch range and current range?  or time? shi.....
 
 class Calculator:
 
