@@ -35,8 +35,7 @@ class Engagement:
     def execute(self):
         c = Calculator(3)   # 3 second g-onset hard coded for now
         dive = self.state['target_dive']
-        print(f"starting at {self.state['alt']}ft and"
-              " {self.state['vel']} knots, diving to {dive} degrees")
+        print(f"starting at {self.state['alt']}ft and {self.state['vel']} knots, diving to {dive} degrees")
 
         self.update_state(c.time_to_act(self.state['delay'],
                                         self.state['vel']))
@@ -61,13 +60,15 @@ class Engagement:
         self.state['time'] = starting['time'] + deltas['time']
         try:
             self.state['dive'] = deltas['dive']
+        except:
+            pass
         try:
             self.state['vel'] = deltas['vel']
+        except:
+            pass
         # self.check_for_death()
 
-        print(f"At time {self.state['time']:.1f}: {self.state['alt']:.0f}ft,"
-              " Rng: {(self.state['rng']/6036):.1f}nm,"
-              " Dive: {self.state['dive']:.1f}deg")
+        print(f"At time {self.state['time']:.1f}: {self.state['alt']:.0f}ft, Rng: {(self.state['rng']/6036):.1f}nm, Dive: {self.state['dive']:.1f}deg")
 
     # def check_for_death(self):
     #   if self.state['time'] > self.missile.tof:
